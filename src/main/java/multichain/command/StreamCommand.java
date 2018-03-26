@@ -7,17 +7,17 @@
  */
 package multichain.command;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import multichain.command.builders.QueryBuilderStream;
 import multichain.object.Address;
 import multichain.object.Stream;
 import multichain.object.StreamKey;
 import multichain.object.StreamKeyItem;
 import multichain.object.formatters.StreamFormatter;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Ub - H. MARTEAU
@@ -714,6 +714,90 @@ public class StreamCommand extends QueryBuilderStream {
 	 */
 	public List<StreamKeyItem> listStreamItems(String streamName) throws MultichainException {
 		return listStreamItems(streamName, false, 10);
+	}
+
+	/**
+	 * @param streamName
+	 * @param address
+	 * @param verbose
+	 * @param count
+	 * @param start
+	 * @param localOrdering
+	 * @return
+	 * @throws MultichainException
+	 */
+	public List<StreamKeyItem> listStreamPublisherItems(String streamName, String address, boolean verbose, int count, int start, boolean localOrdering) throws MultichainException {
+		Object objectPublisherItems = executeListStreamPublisherItems(streamName, address, verbose, count, start, localOrdering);
+		List<StreamKeyItem> publisherItems = new ArrayList();
+		if (verifyInstance(objectPublisherItems, ArrayList.class)
+				&& verifyInstanceofList((ArrayList<Object>) objectPublisherItems, StreamKeyItem.class)) {
+			publisherItems = StreamFormatter.formatStreamKeyItems((ArrayList<Object>) objectPublisherItems);
+		}
+		return publisherItems;
+	}
+
+	/**
+	 * @param streamName
+	 * @param address
+	 * @return
+	 * @throws MultichainException
+	 */
+	public List<StreamKeyItem> listStreamPublisherItems(String streamName, String address) throws MultichainException {
+		int count = 10;
+		int start = -count;
+		return listStreamPublisherItems(streamName, address, false, count, start, false);
+	}
+
+	/**
+	 *
+	 * @param streamName
+	 * @param address
+	 * @param count
+	 * @return
+	 * @throws MultichainException
+	 */
+	public List<StreamKeyItem> listStreamPublisherItems(String streamName, String address,int count) throws MultichainException {
+		int start = -count;
+		return listStreamPublisherItems(streamName, address, false, count, start, false);
+	}
+
+	/**
+	 *
+	 * @param streamName
+	 * @param address
+	 * @param count
+	 * @param start
+	 * @return
+	 * @throws MultichainException
+	 */
+	public List<StreamKeyItem> listStreamPublisherItems(String streamName, String address,int count,int start) throws MultichainException {
+		return listStreamPublisherItems(streamName, address, false, count, start, false);
+	}
+
+
+	/**
+	 *
+	 * @param streamName
+	 * @param address
+	 * @param verbose
+	 * @return
+	 * @throws MultichainException
+	 */
+	public List<StreamKeyItem> listStreamPublisherItems(String streamName, String address,boolean verbose) throws MultichainException {
+		return listStreamPublisherItems(streamName, address, verbose, 10, -10, false);
+	}
+
+	/**
+	 *
+	 * @param streamName
+	 * @param address
+	 * @param verbose
+	 * @param localOrdering
+	 * @return
+	 * @throws MultichainException
+	 */
+	public List<StreamKeyItem> listStreamPublisherItems(String streamName, String address, boolean verbose, boolean localOrdering) throws MultichainException {
+		return listStreamPublisherItems(streamName, address, verbose, 10, -10, localOrdering);
 	}
 
 	/**
